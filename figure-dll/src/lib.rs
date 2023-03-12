@@ -1,26 +1,24 @@
 use std::ffi::{c_char, CStr, CString};
+use std::ptr::addr_of;
 use once_cell::sync::{Lazy, OnceCell};
-use figure::Window;
 
-pub static mut WINDOW: Lazy<OnceCell<Window>> = Lazy::new(|| {OnceCell::new()});
+pub type Int = i64;
 
 #[no_mangle]
-pub extern "C" fn create_figure_window(title:*const c_char,width: i32,height: i32){
+pub extern "C" fn create_figure_window(title:*const c_char,width: i32,height: i32) -> Box<*const Int> {
     unsafe {
-        let win = Window::new(CStr::from_ptr(title).to_str().unwrap(), width as u32, height as u32);
-        match WINDOW.set(win) {
-            Ok(_) => {}
-            Err(_) => {
-                panic!("Window is already created");
-            }
-        }
+        let window = figure::Window::new(CStr::from_ptr(title).to_str().unwrap(), width as u32, height as u32);
+        println!("Create window");
+        let x = Box::new(addr_of!(window) as *const Int);
+        println!("Get pointer");
+        x
     }
 }
 
 #[no_mangle]
-pub extern "C" fn run_figure_window() {
+pub extern "C" fn run_figure_window(window: *const Box<*const Int>) {
     unsafe {
-        let mut win= WINDOW.take().unwrap();
-        win.run();
+        let window = window as *const Box<*const figure::Window>;
+        (*window).read_volatile().run();
     }
 }

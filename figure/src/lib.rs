@@ -1,9 +1,10 @@
-use azusa::{Azusa, Color, ImageSurface, ImageType};
+use azusa::{Azusa, Color, FontInfo, ImageSurface, ImageType, UString};
 use azusa::window::WindowSurface;
 use winit::event::{Event, WindowEvent};
 use winit::event_loop::EventLoop;
 use winit::window::WindowBuilder;
 
+#[repr(C)]
 pub struct Window {
     event_loop: Option<EventLoop<()>>,
     window: winit::window::Window,
@@ -46,6 +47,11 @@ impl Window {
                 Event::MainEventsCleared => {
                     self.azusa.set_source_color(Color::White);
                     self.azusa.clear();
+                    self.azusa.set_source_color(Color::Gray);
+                    self.azusa.set_border_color(Color::Gray);
+                    self.azusa.fill_rectangle(200,100);
+                    self.azusa.set_source_color(Color::White);
+                    self.azusa.draw_text(200,100,UString::new("Hello World"),FontInfo::new(14,false,false));
                     self.azusa.draw(&mut self.surface);
                 }
                 _ => (),
