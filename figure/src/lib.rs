@@ -1,8 +1,53 @@
-use azusa::{Azusa, Color, FontInfo, ImageSurface, ImageType, UString};
+use azusa::Azusa;
 use azusa::window::WindowSurface;
+use winit::dpi::LogicalSize;
 use winit::event::{Event, WindowEvent};
 use winit::event_loop::EventLoop;
 use winit::window::WindowBuilder;
+
+pub type Color = azusa::Color;
+
+pub trait Widget {
+    fn reserve_drawing(&self,azusa: &mut Azusa);
+}
+
+
+
+pub struct Rectangle {
+    color: Color,
+    border_color: Color,
+    x:u32,
+    y:u32,
+    width:u32,
+    height:u32
+}
+
+impl Rectangle {
+    pub fn new(color: Color,
+               border_color: Color,
+               x:u32,
+               y:u32,
+               width:u32,
+               height:u32) -> Self {
+        Self {
+            color,
+            border_color,
+            x,
+            y,
+            width,
+            height,
+        }
+    }
+}
+
+impl Widget for Rectangle {
+    fn reserve_drawing(&self,azusa: &mut Azusa) {
+        azusa.set_source_color(self.color);
+        azusa.set_border_color(self.border_color);
+        azusa.move_to(self.x,self.y);
+        azusa.fill_rectangle(self.width,self.height);
+    }
+}
 
 #[repr(C)]
 pub struct Window {
@@ -34,8 +79,20 @@ impl Window {
         }
     }
 
+    pub fn add<T:Widget>(&mut self,widget: &T) {
+        widget.reserve_drawing(&mut self.azusa);
+    }
+
+    pub fn add_trait(&mut self,widget: &dyn Widget) {
+        widget.reserve_drawing(&mut self.azusa);
+    }
+
     pub fn set_title(&self,title: &str) {
         self.window.set_title(title);
+    }
+
+    pub fn set_size(&self,width:u32,height:u32) {
+        self.window.set_inner_size(LogicalSize::new(width,height));
     }
 
     pub fn run(mut self) {
@@ -49,8 +106,6 @@ impl Window {
                     window_id,
                 } if window_id == self.window.id() => control_flow.set_exit(),
                 Event::MainEventsCleared => {
-                    self.azusa.set_source_color(Color::White);
-                    self.azusa.clear();
                     self.azusa.draw(&mut self.surface);
                 }
                 _ => (),

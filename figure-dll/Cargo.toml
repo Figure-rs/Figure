@@ -11,4 +11,3 @@ crate-type = ["cdylib"]
 
 [dependencies]
 figure = { version = "0.1.0", path = "../figure" }
-once_cell = "1.17.1"
