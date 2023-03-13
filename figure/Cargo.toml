@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 azusa = { version = "0.1.0", git = "https://github.com/Lattexshz/Azusa", features = ["window","png"]}
 winit = "0.28.2"
+
+[build-dependencies]
+cbindgen = "0.20.0"

@@ -34,6 +34,10 @@ impl Window {
         }
     }
 
+    pub fn set_title(&self,title: &str) {
+        self.window.set_title(title);
+    }
+
     pub fn run(mut self) {
         let event_loop = self.event_loop.take().unwrap();
         event_loop.run(move |event, _, control_flow| {
@@ -47,11 +51,6 @@ impl Window {
                 Event::MainEventsCleared => {
                     self.azusa.set_source_color(Color::White);
                     self.azusa.clear();
-                    self.azusa.set_source_color(Color::Gray);
-                    self.azusa.set_border_color(Color::Gray);
-                    self.azusa.fill_rectangle(200,100);
-                    self.azusa.set_source_color(Color::White);
-                    self.azusa.draw_text(200,100,UString::new("Hello World"),FontInfo::new(14,false,false));
                     self.azusa.draw(&mut self.surface);
                 }
                 _ => (),
