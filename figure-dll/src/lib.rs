@@ -104,3 +104,11 @@ pub extern "C" fn figure_new_label(background_color: CColor,foreground_color: CC
     let label = Box::new(label);
     Box::into_raw(label)
 }
+
+#[no_mangle]
+pub extern "C" fn figure_set_widget_background_color(widget: *mut FWidget,color: CColor) {
+    unsafe {
+        let widget = &*widget;
+        widget.set_background_color(color.into());
+    }
+}

@@ -49,6 +49,8 @@ Window *figure_create_window();
 FWidget *figure_new_rectangle(Color color,Color border_color,unsigned int x,unsigned int y,unsigned int width,unsigned int height);
 FWidget *figure_new_label(Color background_color,Color foreground_color,const char* text,unsigned int x,unsigned int y,unsigned int width,unsigned int height,unsigned int px);
 
+void figure_set_widget_background_color(FWidget *widget,Color color);
+
 void figure_add(Window *window,FWidget *widget);
 
 void figure_set_window_title(Window *window,const char* title);
