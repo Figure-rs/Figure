@@ -10,6 +10,7 @@ pub type Color = azusa::Color;
 pub trait Widget {
     fn reserve_drawing(&self,azusa: &mut Azusa);
     fn set_background_color(&mut self,color: Color);
+    fn set_foreground_color(&mut self,color: Color);
 }
 
 
@@ -51,6 +52,10 @@ impl Widget for Rectangle {
 
     fn set_background_color(&mut self,color: Color) {
         self.color = color;
+    }
+
+    fn set_foreground_color(&mut self,color: Color) {
+        self.border_color = color;
     }
 }
 
@@ -98,6 +103,10 @@ impl<'a> Widget for Label<'a> {
 
     fn set_background_color(&mut self,color: Color) {
         self.background_color = color;
+    }
+
+    fn set_foreground_color(&mut self,color: Color) {
+        self.foreground_color = color;
     }
 }
 

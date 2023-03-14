@@ -112,3 +112,11 @@ pub extern "C" fn figure_set_widget_background_color(widget: *mut FWidget,color:
         widget.set_background_color(color.into());
     }
 }
+
+#[no_mangle]
+pub extern "C" fn figure_set_widget_foreground_color(widget: *mut FWidget,color: CColor) {
+    unsafe {
+        let widget = &*widget;
+        widget.set_foreground_color(color.into());
+    }
+}
