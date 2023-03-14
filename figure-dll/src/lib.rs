@@ -97,3 +97,10 @@ pub extern "C" fn figure_new_rectangle(color: CColor, border_color: CColor,x:u32
     let rectangle = Box::new(FWidget(Box::new(rectangle)));
     Box::into_raw(rectangle)
 }
+
+#[no_mangle]
+pub extern "C" fn figure_new_label(background_color: CColor,foreground_color: CColor,text: *const c_char,x:u32,y:u32,width:u32,height:u32,px:u32) -> *mut FWidget {
+    let label = Label::new(background_color.into(),foreground_color.into(),CStr::from_ptr(text).to_str().unwrap(),x,y,width,height,px);
+    let label = Box::new(label);
+    Box::into_raw(label)
+}

@@ -1,4 +1,4 @@
-use azusa::Azusa;
+use azusa::{Azusa,UString,FontInfo};
 use azusa::window::WindowSurface;
 use winit::dpi::LogicalSize;
 use winit::event::{Event, WindowEvent};
@@ -46,6 +46,49 @@ impl Widget for Rectangle {
         azusa.set_border_color(self.border_color);
         azusa.move_to(self.x,self.y);
         azusa.fill_rectangle(self.width,self.height);
+    }
+}
+
+pub struct Label<'a> {
+    background_color: Color,
+    foreground_color: Color,
+    text: &'a str,
+    x: u32,
+    y: u32,
+    width: u32,
+    height: u32,
+    px: u32
+}
+
+impl Label {
+    pub fn new(background_color: Color,
+        foreground_color: Color,
+        text: &'a str,
+        x: u32,
+        y: u32,
+        width: u32,
+        height: u32,
+        px: u32) -> Self {
+            Self {
+                foreground_color,
+                background_color,
+                text,
+                x,
+                y,
+                width,
+                height,
+                px
+            }
+    }
+}
+
+impl<'a> Widget for Label<'a> {
+    fn reserve_drawing(&self,azusa: &mut Azusa) {
+        let string = UString::new(self.text);
+        azusa.move_to(self.x,self.y);
+        azusa.set_source_color(self.background_color);
+        azusa.set_border_color(self.background_color);
+        azusa.draw_text(self.width,self.height,text,FontInfo::new(self.px,false,false));
     }
 }
 
